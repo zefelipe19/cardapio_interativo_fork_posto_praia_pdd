@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block 'content' %}
+<div x-data="getMenu">
+    <template x-for="category in menu" :key="category.id">
+        <!-- Listagem de produtos em acordeon -->
+        <!-- Para repetição deixar o id dinâmico -->
+
+        <div class="accordion mb-2" id="accordionMenu-{{category.id}}">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="`#category-${category.id}`" x-text="category.title">
+
+                    </button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="`category-${category.id}`"
+                    data-bs-parent="accordionMenu-{{category.id}}">
+                    <div class="accordion-body d-flex gap-1 justify-content-evenly flex-wrap">
+                        <template x-for="product in category.products" :key="product.title" x-model="prodcut">
+                            <!-- Cartão dos produtos -->
+                            <div class="card mb-1" style="max-width: 570px">
+                                <div class="row g-0">
+                                    <div class="col-md-5">
+                                        <img src="{% static 'img/product_placeholder.png' %}" alt=""
+                                            class="img-fluid rounded-start" style="height: 100%; object-fit: cover" />
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="card-body">
+                                            <span style="display: none;" id="product_id"></span>
+                                            <h5 class="card-title" x-text="`${product.title} - R$ ${product.price}`">
+                                            </h5>
+                                            <p class="card-text">descrição item 1</p>
+                                            <div class="card-footer d-flex gap-1">
+                                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#modalcard-{{ product.id }}">
+                                                    Detalhes
+                                                </button>
+                                                <button class="btn btn-success" onclick="addInCart()">Adicionar
+                                                    ao carrinho</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal do cartão -->
+                            <div class="modal fade" id="modalcard-{{ product.id }}" data-bs-backdrop="static"
+                                aria-hidden="true" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title"></h3>
+                                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Descrição do item 1</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <h5 class="modal-title">R$ </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fim Card -->
+
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
+</div>
+{% endblock %}
+
+{% block 'script' %}
+<script src="{% static 'js/scripts.js' %}"></script>
+{% endblock %}
