@@ -1,5 +1,5 @@
 from django.db import models
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify  
 from uuid import uuid4
 
 
@@ -29,7 +29,7 @@ class Product(BaseModel):
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='Preço')
     promotional_price = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     description = models.TextField(blank=True, null=True, verbose_name='Descrição')
-    image = models.ImageField(blank=True, null=True, verbose_name='Foto', upload_to='media/produtos/')
+    image = models.ImageField(blank=True, null=True, verbose_name='Foto', upload_to='produtos/', )
     is_active = models.BooleanField(default=True, verbose_name='Em Estoque')
     is_promo = models.BooleanField(default=False, verbose_name='Em Promoção')
     slug = models.SlugField(blank=True, null=True)
@@ -48,3 +48,4 @@ class Product(BaseModel):
             self.slug = slugify(f"{self.title}-{self.category}-{uuid4()}")
         super().save()
         return
+    
