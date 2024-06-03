@@ -20,4 +20,11 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
 
 
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('title', 'price', 'is_active', 'is_promo', 'promotional_price')
+    list_display_links = ('title',)
+    list_editable = ('price','is_active', 'is_promo', 'promotional_price')
+
+
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Product, ProductAdmin)

@@ -12,38 +12,42 @@
     <div class="card-header">
         <h3 class="card-title">Produtos</h3>
     </div>
-    <div class="list-group list-group-flush" x-data="cart">
+    <div class="list-group list-group-flush" x-data="getCart">
+        <template x-if="products">
 
-        <template x-for="product in products" :key="product.id">
 
-            <!-- Product item -->
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div x-text="product.title"></div>
-                <div class="d-flex gap-3 align-items-center">
-                    <button class="btn btn-danger">
-                        <i class="bi bi-dash" @click="reduceOrRemove(product)"></i>
-                    </button>
-                    <span x-text="product.qtd" x-model="product.qtd"></span>
-                    <button class="btn btn-success">
-                        <i class="bi bi-plus" @click="product.qtd ++"></i>
-                    </button>
-                    <span x-text="`R$ ${(product.price * product.qtd).toFixed(2)}`"></span>
+            <template x-for="product in products" :key="product.id">
+
+                <!-- Product item -->
+                <div class="card-body list-group-item d-flex justify-content-between align-items-center">
+                    <div x-text="product.title"></div>
+                    <div class="d-flex gap-3 align-items-center">
+                        <button class="btn btn-danger">
+                            <i class="bi bi-dash" @click="reduceOrRemove(product)"></i>
+                        </button>
+                        <span x-text="product.qtd" x-model="product.qtd"></span>
+                        <button class="btn btn-success">
+                            <i class="bi bi-plus" @click="addProductQtd(product)"></i>
+                        </button>
+                        <span x-text="`R$ ${(product.price * product.qtd).toFixed(2)}`"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- End item -->
-        </template>
+                <!-- End item -->
 
+                
+            </template>
+        </template>
+        <template x-if="!products">
+            
+            <div class="container">
+                <h1>Seu carrinho ainda está vazio</h1>
+            </div>
+            
+        </template>
         <div class="card-footer d-flex justify-content-end align-items-center gap-2">
-            <div></div>
             <button class="btn btn-primary">Pedir</button>
             <button @click="clearCart" class="btn btn-danger">Limpar Carrinho</button>
         </div>
-
-        <div class="container">
-            <h1>Seu carrinho ainda está vazio</h1>
-        </div>
-
-
     </div>
 </div>
 

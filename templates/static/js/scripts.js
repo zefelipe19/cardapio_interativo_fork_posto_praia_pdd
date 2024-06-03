@@ -7,16 +7,31 @@ const getMenu = () => ({
     menu: [],
     async getMenu() {
         await fetch('/api/v1/list_menu')
-        .then(res => res.json())
-        .then(res => (
-            this.menu = res,
-            console.log(res)
-        ))
+            .then(res => res.json())
+            .then(res => (
+                this.menu = res
+            ))
+    },
+    addInCart(product) {
+        let cart = []
+        if (localStorage.hasOwnProperty("cart")) {
+            cart = JSON.parse(localStorage.getItem("cart"))
+        }
+        let productIndex = cart.findIndex(p => p.id === product.id)
+        if (productIndex >= 0){
+            let productInCart = cart[productIndex]
+            productInCart.qtd ++
+            
+        } else {
+            cart.push({ id: product.id, title: product.title, qtd: 1, price: parseFloat(product.price) })
+            console.log("added")
+        }
+        localStorage.setItem("cart", JSON.stringify(cart))
     }
 })
 
 
-const cart = () => ({
+const getCart = () => ({
     init() {
         this.getProducts()
     },
@@ -30,7 +45,14 @@ const cart = () => ({
         if (product.qtd <= 1) {
             this.products.splice(productIndex, 1)
         }
-        return product.qtd--
+        product.qtd--
+        localStorage.setItem("cart", JSON.stringify(this.products)) 
+        return this.getProducts()
+    },
+    addProductQtd(product) {
+        product.qtd++
+        localStorage.setItem("cart", JSON.stringify(this.products)) 
+        return this.getProducts()
     },
     clearCart() {
         if (localStorage.hasOwnProperty("cart")) {
@@ -42,17 +64,16 @@ const cart = () => ({
     },
 })
 
-function addInCart(product) {
-    let cart = []
-    if (localStorage.hasOwnProperty("cart")) {
-      cart = JSON.parse(localStorage.getItem("cart"))
+
+const getPromos = () => ({
+    init() {
+        this.getPromoProducts(),
+        console.log(this.promoProducts)
+    },
+    promoProducts: [],
+    async getPromoProducts () {
+        await fetch('/api/v1/list_promos')
+        .then(res => res.json())
+        .then(res => (this.promoProducts = res))
     }
-    let productIndex = cart.findIndex(p => p.id == product.id)
-    if (productIndex) {
-      console.log(cart[productIndex])
-    }
-    cart.push({ id: product.id, title: product.title, qtd: 1, price: parseFloat(product.price) })
-    localStorage.setItem("cart", JSON.stringify(cart))
-    
-  }
-  
+})
