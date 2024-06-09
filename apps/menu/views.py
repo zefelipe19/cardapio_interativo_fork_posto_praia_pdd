@@ -5,3 +5,6 @@ def index(request):
 
 def cart(request):
     return render(request, 'cart.html')
+
+def admin(request):
+    return render(request, 'admin.html')
