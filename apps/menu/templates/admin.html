@@ -2,64 +2,149 @@
 {% load static %}
 
 {% block 'content' %}
-<div x-data="getMenu">
-    <template x-for="category in menu" :key="category.id">
-        <!-- Listagem de produtos em acordeon -->
-        <!-- Para repetição deixar o id dinâmico -->
+<div x-data="adminAria">
+    <div class='container mb-1'>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newCategoryModal">Nova
+            Categoria</button>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newProductModal">Novo Produto</button>
 
-        <div class="accordion mb-2" :id="`accordionMenu-${category.id}`">
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        :data-bs-target="`#category-${category.id}`" x-text="category.title">
+        <!-- modal de nova categoria -->
+        <div class="modal fade" id="newCategoryModal" data-bs-backdrop="static" aria-hidden="true"
+            data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Nova Categoria</h3>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Titulo
+                        <label for="categoryTitle">
+                            <input type="text" name="categoryTitle" id="categoryTitle" placeholder="Titulo da Categoria"
+                                class="form-control" x-model="newCategoryModel.title">
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" @click="createNewCategory">Criar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal de novo produto -->
+        <div class="modal fade" id="newProductModal" data-bs-backdrop="static" aria-hidden="true"
+            data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Novo Produto</h3>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="category">
+                            Categoria
+                            <select name="idCategory" id="idCategory" class="form-control">
+                                <option>---------</option>
+                                <template x-for="category in allCategories" :key="category.id">
+                                    <option :value="category.id" x-text="category.title"></option>
+                                </template>
+                            </select>
+                        </label>
+                        <label for="productTitle">
+                            Titulo
+                            <input type="text" name="productTitle" id="productTitle" placeholder="Título"
+                                class="form-control">
+                        </label>
+                        <label for="price">
+                            Preço
+                            <input type="text" name="price" id="productPrice" placeholder="19.99" class="form-control">
+                        </label>
+                        <label for="promocional_price">
+                            Preço de Promoção
+                            <input type="text" name="promocional_price" id="productPromocionalPrice" placeholder="15.99"
+                                class="form-control">
+                        </label>
+                        <label for="description">
+                            Descrição
+                            <textarea name="description" id="productDescription" class="form-control"></textarea>
+                        </label>
+                        <label for="is_active">
+                            Em Estoque/Ativo
+                            <input type="checkbox" name="is_active" id="productIsActive">
+                        </label>
+                        <label for="is_promo">
+                            Em Promoção
+                            <input type="checkbox" name="is_promo" id="productIsPromo">
+                        </label>
+                        <label for="image">
+                            <input type="file" name="image" id="productImage" class="form-control">
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" @click="createNewProduct">Criar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <template x-for="category in menu" :key="category.id">
+            <!-- Listagem de produtos em acordeon -->
+            <!-- Para repetição deixar o id dinâmico -->
 
-                    </button>
-                </h2>
-                <div class="accordion-collapse collapse" :id="`category-${category.id}`"
-                    :data-bs-parent="`accordionMenu-${category.id}`">
-                    <div class="accordion-body d-flex gap-2 justify-content-evenly flex-wrap">
-                        <template x-for="product in category.products" :key="product.id">
-                            <!-- Cartão dos produtos -->
-                            <div class="card mb-1" style="max-width: 570px">
-                                <div class="row g-0">
-                                    <div class="col-md-5">
-                                        <template x-if="!product.image">
-                                            <img src="{% static 'img/product_placeholder.png' %}" alt=""
-                                                class="img-fluid rounded-start"
-                                                style="height: 100%; object-fit: cover; width: 100%;" />
-                                        </template>
-                                        <template x-if="product.image">
-                                            <img :src="`${product.image}`" alt="" class="img-fluid rounded-start"
-                                                style="height: 100%; object-fit: cover; width: 100%;" />
-                                        </template>
-                                    </div>
+            <div class="accordion mb-2" :id="`accordionMenu-${category.id}`">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            :data-bs-target="`#category-${category.id}`" x-text="category.title">
 
-                                    <div class="col-md-7">
-                                        <div class="card-body">
-                                            <h5 class="card-title" x-text="`${product.title} - R$ ${product.price}`">
-                                            </h5>
-
-                                            <p class="card-text" x-text="product.description"></p>
-                                            <div class="card-footer d-flex gap-1">
-                                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                                    :data-bs-target="`#modalcard-${product.id}`">
-                                                    Editar
-                                                </button>
-                                                <button class="btn btn-success"
-                                                    @click="() => addInCart({id:`${product.id}`, title:`${product.title}`, price:`${product.price}`})">Adicionar
-                                                    ao carrinho</button>
-                                            </div>
+                        </button>
+                    </h2>
+                    <div class="accordion-collapse collapse" :id="`category-${category.id}`"
+                        :data-bs-parent="`accordionMenu-${category.id}`">
+                        <div class="accordion-body d-flex gap-2 justify-content-evenly flex-wrap">
+                            <template x-for="product in category.products" :key="product.id">
+                                <!-- Cartão dos produtos -->
+                                <div class="card mb-1" style="max-width: 570px">
+                                    <div class="row g-0">
+                                        <div class="col-md-5">
+                                            <template x-if="!product.image">
+                                                <img src="{% static 'img/product_placeholder.png' %}" alt=""
+                                                    class="img-fluid rounded-start"
+                                                    style="height: 100%; object-fit: cover; width: 100%;" />
+                                            </template>
+                                            <template x-if="product.image">
+                                                <img :src="`${product.image}`" alt="" class="img-fluid rounded-start"
+                                                    style="height: 100%; object-fit: cover; width: 100%;" />
+                                            </template>
                                         </div>
 
+                                        <div class="col-md-7">
+                                            <div class="card-body">
+                                                <h5 class="card-title"
+                                                    x-text="`${product.title} - R$ ${product.price}`">
+                                                </h5>
+
+                                                <p class="card-text" x-text="product.description"></p>
+                                                <div class="card-footer d-flex gap-1">
+                                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                                        :data-bs-target="`#modalcard-${product.id}`">
+                                                        Editar
+                                                    </button>
+                                                    <button class="btn btn-success"
+                                                        @click="() => addInCart({id:`${product.id}`, title:`${product.title}`, price:`${product.price}`})">Adicionar
+                                                        ao carrinho</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                </div>
 
 
-                                <!-- Modal do cartão -->
-                                <div class="modal fade" :id="`modalcard-${product.id}`" data-bs-backdrop="static"
-                                    aria-hidden="true" data-bs-keyboard="false" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <form action="." class="form-group">
+                                    <!-- Modal do cartão -->
+                                    <div class="modal fade" :id="`modalcard-${product.id}`" data-bs-backdrop="static"
+                                        aria-hidden="true" data-bs-keyboard="false" tabindex="-1">
+                                        <div class="modal-dialog">
+
                                             <div class="modal-content">
 
 
@@ -103,21 +188,22 @@
                                                     <button class="btn btn-success">Salvar</button>
                                                 </div>
                                             </div>
-                                        </form>
+
+                                        </div>
                                     </div>
+
+
                                 </div>
+                                <!-- Fim Card -->
 
-
-                            </div>
-                            <!-- Fim Card -->
-
-                        </template>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Fim do acordeon -->
-    </template>
+            <!-- Fim do acordeon -->
+        </template>
+    </div>
 </div>
 {% endblock %}
 

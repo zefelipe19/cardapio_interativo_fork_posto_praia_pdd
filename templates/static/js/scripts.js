@@ -1,12 +1,13 @@
 const data = document.currentScript.dataset
+const apiUrl = '/api/v1/'
 
 const getMenu = () => ({
     init() {
-        this.getMenu()
+        this.getProducts()
     },
     menu: [],
-    async getMenu() {
-        await fetch('/api/v1/list_menu')
+    async getProducts() {
+        await fetch(apiUrl +'list_menu')
             .then(res => res.json())
             .then(res => (
                 this.menu = res
@@ -24,7 +25,6 @@ const getMenu = () => ({
             
         } else {
             cart.push({ id: product.id, title: product.title, qtd: 1, price: parseFloat(product.price) })
-            console.log("added")
         }
         localStorage.setItem("cart", JSON.stringify(cart))
     }
@@ -67,13 +67,70 @@ const getCart = () => ({
 
 const getPromos = () => ({
     init() {
-        this.getPromoProducts(),
-        console.log(this.promoProducts)
+        this.getPromoProducts()
     },
     promoProducts: [],
     async getPromoProducts () {
-        await fetch('/api/v1/list_promos')
+        await fetch(apiUrl + 'list_promos')
         .then(res => res.json())
         .then(res => (this.promoProducts = res))
+    }
+})
+
+
+const adminAria = () => ({
+    init() {
+        this.getCategories(),
+        this.getProducts()
+    },
+    allCategories: [],
+    async getCategories () {
+        await fetch(apiUrl + 'category')
+        .then(res => res.json())
+        .then(res => (this.allCategories = res))
+    },
+    menu: [],
+    async getProducts() {
+        await fetch(apiUrl +'list_menu')
+            .then(res => res.json())
+            .then(res => (
+                this.menu = res
+            ))
+    },
+    newCategoryModel: {
+        title: ''
+    },
+    async createNewCategory() {
+        await fetch(apiUrl + 'category', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.newCategoryModel)
+        })
+        .then(res => res.json())
+        .then(res => (window.alert(`${res.category} foi criada!`), this.getProducts()))
+    },
+    async createNewProduct() {
+        let productModel = {
+            category_id: Number(document.querySelector('#idCategory').value),
+            title: document.querySelector("#productTitle").value,
+            price: Number(document.querySelector("#productPrice").value),
+            promotional_price: Number(document.querySelector("#productPromocionalPrice").value),
+            description: document.querySelector('#productDescription').value,
+            image: document.querySelector("#productImage").files[0],
+            is_active: document.querySelector("#productIsActive").checked,
+            is_promo: document.querySelector('#productIsPromo').checked
+        }
+        console.log(productModel)
+        // await fetch(apiUrl + 'product', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+                
+        //     })
+        // })
     }
 })
