@@ -37,7 +37,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>Novo Produto</h3>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                        <button class="btn-close" data-bs-dismiss="modal" id="closeModalProduct"></button>
                     </div>
                     <div class="modal-body">
                         <label for="category">
@@ -76,6 +76,7 @@
                             <input type="checkbox" name="is_promo" id="productIsPromo">
                         </label>
                         <label for="image">
+                            Imagem do Produto:
                             <input type="file" name="image" id="productImage" class="form-control">
                         </label>
                     </div>
@@ -130,9 +131,9 @@
                                                         :data-bs-target="`#modalcard-${product.id}`">
                                                         Editar
                                                     </button>
-                                                    <button class="btn btn-success"
-                                                        @click="() => addInCart({id:`${product.id}`, title:`${product.title}`, price:`${product.price}`})">Adicionar
-                                                        ao carrinho</button>
+                                                    <button class="btn btn-danger"
+                                                        @click="() => (deleteProduct(product.id))">Excluir
+                                                        Produto</button>
                                                 </div>
                                             </div>
 
@@ -152,7 +153,7 @@
                                                     <label for="title">
                                                         Titulo:
                                                         <input type="text" name="title" id="title"
-                                                            :value="product.title">
+                                                            :value="product.title" class="form-control">
                                                     </label>
                                                     <button class="btn-close" data-bs-dismiss="modal"></button>
                                                 </div>
@@ -160,18 +161,20 @@
                                                     <label for="description">
                                                         Descrição:
                                                         <textarea name="description" id="description"
-                                                            :value="product.description"></textarea>
+                                                            :value="product.description"
+                                                            class="form-control"></textarea>
                                                     </label>
                                                     <label for="price">
                                                         Preço:
                                                         <input type="text" name="price" id="price"
-                                                            :value="product.price">
+                                                            :value="product.price" class="form-control">
 
                                                     </label>
                                                     <label for="promocional_price">
                                                         Preço Promocional:
                                                         <input type="text" name="promocional_price"
-                                                            id="promocional_price" :value="product.promocional_price">
+                                                            id="promocional_price" :value="product.promocional_price"
+                                                            class="form-control">
                                                     </label>
                                                     <label for="is_active">
                                                         Em Estoque/Ativo:
@@ -182,6 +185,11 @@
                                                         Em Promoção:
                                                         <input type="checkbox" name="is_promo" id="is_promo"
                                                             :value="product.is_promo">
+                                                    </label>
+                                                    <label for="image">
+                                                        Nova Imagem:
+                                                        <input type="file" name="image" id="productImage"
+                                                            class="form-control">
                                                     </label>
                                                 </div>
                                                 <div class="modal-footer">

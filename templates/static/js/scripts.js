@@ -101,6 +101,7 @@ const adminAria = () => ({
         title: ''
     },
     async createNewCategory() {
+        let closeModalButton = document.querySelector("#closeModalProduct")
         await fetch(apiUrl + 'category', {
             method: 'POST',
             headers: {
@@ -109,7 +110,10 @@ const adminAria = () => ({
             body: JSON.stringify(this.newCategoryModel)
         })
         .then(res => res.json())
-        .then(res => (window.alert(`${res.category} foi criada!`), this.getProducts(), this.getCategories()))
+        .then(res => (
+            window.alert(`${res.title} foi criada!`), 
+            this.menu.unshift(res)
+        ))
     },
     async createNewProduct() {
         let newProductData = new FormData()
@@ -119,7 +123,7 @@ const adminAria = () => ({
             price: Number(document.querySelector("#productPrice").value),
             promotional_price: Number(document.querySelector("#productPromocionalPrice").value),
             description: document.querySelector('#productDescription').value,
-            // image: document.querySelector("#productImage").files[0],
+            image: document.querySelector("#productImage").files[0],    
             is_active: document.querySelector("#productIsActive").checked,
             is_promo: document.querySelector('#productIsPromo').checked
         }
@@ -133,5 +137,15 @@ const adminAria = () => ({
         })
         .then(res => res.json())
         .then(res => console.log(res))
+    },
+    async deleteProduct(product_id) {
+        await fetch(apiUrl + `product/${product_id}`, {
+            method: 'DELETE',
+        })
+        .then(res => res.json())
+        .then(res => (
+            window.alert(`O produto ${res.deleted} foi deletado permanentemente!`),
+            this.menu.pop()
+        ))
     }
 })

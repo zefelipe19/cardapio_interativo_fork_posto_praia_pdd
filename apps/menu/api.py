@@ -25,7 +25,16 @@ def list_categories(request):
 @api.post('/category')
 def create_category(request, payload: CategorySchemaIn):
     category = Category.objects.create(**payload.dict())
-    return {"category": category.title}
+    return {"id": category.id, "title": category.title}
+
+@api.delete('/category/{category_id}')
+def delete_category(request, category_id: int):
+    try:
+        category = get_object_or_404(Category, id=category_id)
+        category.delete()
+        return {"deleted": category.title}
+    except:
+        return {"error": "cannot delete category with products"}
 
 @api.post('/product')
 def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File(...)):
@@ -39,7 +48,8 @@ def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File
     return {"category": product.category.title, "product": product.title}
 
 @api.delete('/product/{product_id}')
-def delete_product(request, product_id):
+def delete_product(request, product_id: int):
     product = get_object_or_404(Product, id=product_id)
     product.delete()
     return {"deleted": product.title}
+
