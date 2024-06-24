@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from ninja import NinjaAPI
+from ninja import NinjaAPI, File
+from ninja.files import UploadedFile
 from .schemas import ProductSchemaIn, ProductSchema, CategorySchemaIn, CategorySchemaMenu, CategorySchema
 from .models import Product, Category
 
@@ -27,12 +28,13 @@ def create_category(request, payload: CategorySchemaIn):
     return {"category": category.title}
 
 @api.post('/product')
-def create_product(request, payload: ProductSchemaIn):
+def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File(...)):
     product_data = payload.dict()
+    product_img = image
     product = Product.objects.create(
         category=Category.objects.get(id=product_data.pop("category", None)),
-        **product_data
-        
+        **product_data,
+        image=product_img
     )
     return {"category": product.category.title, "product": product.title}
 

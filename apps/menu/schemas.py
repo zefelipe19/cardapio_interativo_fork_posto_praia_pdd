@@ -11,7 +11,7 @@ class ProductSchema(ModelSchema):
 class ProductSchemaIn(ModelSchema):
     class Meta:
         model = Product
-        fields = ['category', 'title', 'price', 'promotional_price', 'description', 'image', 'is_active', 'is_promo']
+        fields = ['category', 'title', 'price', 'promotional_price', 'description', 'is_active', 'is_promo']
 
 
 class CategorySchema(ModelSchema):

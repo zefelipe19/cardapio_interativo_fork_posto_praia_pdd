@@ -109,28 +109,29 @@ const adminAria = () => ({
             body: JSON.stringify(this.newCategoryModel)
         })
         .then(res => res.json())
-        .then(res => (window.alert(`${res.category} foi criada!`), this.getProducts()))
+        .then(res => (window.alert(`${res.category} foi criada!`), this.getProducts(), this.getCategories()))
     },
     async createNewProduct() {
+        let newProductData = new FormData()
         let productModel = {
             category_id: Number(document.querySelector('#idCategory').value),
             title: document.querySelector("#productTitle").value,
             price: Number(document.querySelector("#productPrice").value),
             promotional_price: Number(document.querySelector("#productPromocionalPrice").value),
             description: document.querySelector('#productDescription').value,
-            image: document.querySelector("#productImage").files[0],
+            // image: document.querySelector("#productImage").files[0],
             is_active: document.querySelector("#productIsActive").checked,
             is_promo: document.querySelector('#productIsPromo').checked
         }
-        console.log(productModel)
-        // await fetch(apiUrl + 'product', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-                
-        //     })
-        // })
+        for (item in productModel) {
+            newProductData.append(`${item}`, productModel[item])
+        }
+        console.log(newProductData)
+        await fetch(apiUrl + 'product', {
+            method: 'POST',
+            body: newProductData
+        })
+        .then(res => res.json())
+        .then(res => console.log(res))
     }
 })
