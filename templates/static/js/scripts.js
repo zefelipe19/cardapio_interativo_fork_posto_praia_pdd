@@ -101,7 +101,6 @@ const adminAria = () => ({
         title: ''
     },
     async createNewCategory() {
-        let closeModalButton = document.querySelector("#closeModalProduct")
         await fetch(apiUrl + 'category', {
             method: 'POST',
             headers: {
@@ -112,31 +111,37 @@ const adminAria = () => ({
         .then(res => res.json())
         .then(res => (
             window.alert(`${res.title} foi criada!`), 
-            this.menu.unshift(res)
+            this.menu.unshift(res),
+            this.allCategories.push(res),
+            this.newCategoryModel.title = ''
         ))
     },
     async createNewProduct() {
         let newProductData = new FormData()
+        let productImage = document.querySelector("#productImage").files[0]
         let productModel = {
             category_id: Number(document.querySelector('#idCategory').value),
             title: document.querySelector("#productTitle").value,
-            price: Number(document.querySelector("#productPrice").value),
-            promotional_price: Number(document.querySelector("#productPromocionalPrice").value),
+            price: document.querySelector("#productPrice").value,
+            promotional_price: document.querySelector("#productPromocionalPrice").value,
             description: document.querySelector('#productDescription').value,
-            image: document.querySelector("#productImage").files[0],    
             is_active: document.querySelector("#productIsActive").checked,
             is_promo: document.querySelector('#productIsPromo').checked
         }
-        for (item in productModel) {
-            newProductData.append(`${item}`, productModel[item])
-        }
-        console.log(newProductData)
+        
+        newProductData.append('image', productImage)
+        newProductData.append('payload', JSON.stringify(productModel))
+        
+
         await fetch(apiUrl + 'product', {
             method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+            },
             body: newProductData
-        })
-        .then(res => res.json())
-        .then(res => console.log(res))
+        }).then(res => res.json())
+        .then(res => (window.alert(`${res.product} foi criado em ${res.category}`), this.getProducts()))
+
     },
     async deleteProduct(product_id) {
         await fetch(apiUrl + `product/${product_id}`, {
@@ -145,7 +150,15 @@ const adminAria = () => ({
         .then(res => res.json())
         .then(res => (
             window.alert(`O produto ${res.deleted} foi deletado permanentemente!`),
-            this.menu.pop()
+            this.menu.map(category => {
+                category.products.map(product => {
+                    if (product.id === product_id) {
+                        category.products.pop(product)
+                    }
+                })
+            })
         ))
     }
+
+    
 })

@@ -37,8 +37,10 @@ def delete_category(request, category_id: int):
         return {"error": "cannot delete category with products"}
 
 @api.post('/product')
-def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File(...)):
+def create_product(request, payload: ProductSchemaIn, image: UploadedFile = None):
     product_data = payload.dict()
+    print("PAYLOAD: ", payload)
+    print("Request: ", request)
     product_img = image
     product = Product.objects.create(
         category=Category.objects.get(id=product_data.pop("category", None)),
