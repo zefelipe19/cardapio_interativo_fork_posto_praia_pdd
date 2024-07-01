@@ -39,8 +39,6 @@ def delete_category(request, category_id: int):
 @api.post('/product')
 def create_product(request, payload: ProductSchemaIn, image: UploadedFile = None):
     product_data = payload.dict()
-    print("PAYLOAD: ", payload)
-    print("Request: ", request)
     product_img = image
     product = Product.objects.create(
         category=Category.objects.get(id=product_data.pop("category", None)),
@@ -55,3 +53,6 @@ def delete_product(request, product_id: int):
     product.delete()
     return {"deleted": product.title}
 
+@api.put('/product/{product_id}')
+def update_product(request, product_id, payload):
+    pass
