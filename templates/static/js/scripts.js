@@ -178,16 +178,15 @@ const adminAria = () => ({
         delete productData.id
         delete productData.category
         delete productData.image
-        console.log(productData)
 
-        // let newProductImage = document.querySelector(`#productImage${productId}`).files[0] ? document.querySelector(`#productImage${productId}`).files[0] : ''
+        let newProductImage = document.querySelector(`#productImage${productId}`).files[0] ? document.querySelector(`#productImage${productId}`).files[0] : ''
         let updateProductData = new FormData()
 
-        // updateProductData.append('image', newProductImage)
+        updateProductData.append('image', newProductImage)
         updateProductData.append('payload', JSON.stringify(productData))
 
         await fetch(apiUrl + `product/${productId}`, {
-            method: 'PUT',
+            method: 'POST',
             body: updateProductData
         })
         .then(res => {
@@ -197,7 +196,7 @@ const adminAria = () => ({
             return res.json()
         })
         .then(res => (
-            window.alert("Modificação salva com sucesso")
+            this.getProducts()  
         ))
         .catch(error => (
             window.alert(`${error}`)

@@ -36,8 +36,10 @@
 
                                     <div class="col-md-7">
                                         <div class="card-body">
-                                            <h5 class="card-title" x-text="`${product.title} - R$ ${product.promotional_price}`">
-                                            </h5>Preço normal <span x-text="`R$ ${product.price}`" style="color: gray"></span>
+                                            <h5 class="card-title"
+                                                x-text="`${product.title} - R$ ${product.promotional_price}`">
+                                            </h5>Preço normal <span x-text="`R$ ${product.price}`"
+                                                style="color: gray"></span>
 
                                             <p class="card-text" x-text="product.description"></p>
                                             <div class="card-footer d-flex gap-1">
@@ -102,64 +104,66 @@
                     :data-bs-parent="`accordionMenu-${category.id}`">
                     <div class="accordion-body d-flex gap-2 justify-content-evenly flex-wrap">
                         <template x-for="product in category.products" :key="product.id">
-                            <!-- Cartão dos produtos -->
-                            <div class="card mb-1" style="max-width: 570px">
-                                <div class="row g-0">
-                                    <div class="col-md-5">
-                                        <template x-if="!product.image">
-                                            <img src="{% static 'img/product_placeholder.png' %}" alt=""
-                                                class="img-fluid rounded-start"
-                                                style="height: 100%; object-fit: cover; width: 100%;" />
-                                        </template>
-                                        <template x-if="product.image">
-                                            <img :src="`${product.image}`" alt="" class="img-fluid rounded-start"
-                                                style="height: 100%; object-fit: cover; width: 100%;" />
-                                        </template>
-                                    </div>
+                            <template x-if="product.is_active">
+                                <!-- Cartão do produto -->
+                                <div class="card mb-1" style="max-width: 570px">
+                                    <div class="row g-0">
+                                        <div class="col-md-5">
+                                            <template x-if="!product.image">
+                                                <img src="{% static 'img/product_placeholder.png' %}" alt=""
+                                                    class="img-fluid rounded-start"
+                                                    style="height: 100%; object-fit: cover; width: 100%;" />
+                                            </template>
+                                            <template x-if="product.image">
+                                                <img :src="`${product.image}`" alt="" class="img-fluid rounded-start"
+                                                    style="height: 100%; object-fit: cover; width: 100%;" />
+                                            </template>
+                                        </div>
 
-                                    <div class="col-md-7">
-                                        <div class="card-body">
-                                            <h5 class="card-title" x-text="`${product.title} - R$ ${product.price}`">
-                                            </h5>
+                                        <div class="col-md-7">
+                                            <div class="card-body">
+                                                <h5 class="card-title"
+                                                    x-text="`${product.title} - R$ ${product.price}`">
+                                                </h5>
 
-                                            <p class="card-text" x-text="product.description"></p>
-                                            <div class="card-footer d-flex gap-1">
-                                                <!-- <button class="btn btn-primary" data-bs-toggle="modal"
+                                                <p class="card-text" x-text="product.description"></p>
+                                                <div class="card-footer d-flex gap-1">
+                                                    <!-- <button class="btn btn-primary" data-bs-toggle="modal"
                                                     :data-bs-target="`#modalcard-${product.id}`">
                                                     Detalhes
                                                 </button> -->
-                                                <button class="btn btn-success"
-                                                    @click="() => addInCart({id:`${product.id}`, title:`${product.title}`, price:`${product.price}`})">Adicionar
-                                                    ao carrinho</button>
+                                                    <!-- <button class="btn btn-success"
+                                                        @click="() => addInCart({id:`${product.id}`, title:`${product.title}`, price:`${product.price}`})">Adicionar
+                                                        ao carrinho</button> -->
+                                                </div>
                                             </div>
-                                        </div>
 
-                                    </div>
-                                </div>
-
-
-                                <!-- Modal do cartão -->
-                                <div class="modal fade" :id="`modalcard-${product.id}`" data-bs-backdrop="static"
-                                    aria-hidden="true" data-bs-keyboard="false" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h3 class="modal-title" x-text="product.title"></h3>
-                                                <button class="btn-close" data-bs-dismiss="modal"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p x-text="product.description"></p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <h5 class="modal-title" x-text="` R$ ${product.price} `"></h5>
-                                            </div>
                                         </div>
                                     </div>
+
+
+                                    <!-- Modal do cartão -->
+                                    <div class="modal fade" :id="`modalcard-${product.id}`" data-bs-backdrop="static"
+                                        aria-hidden="true" data-bs-keyboard="false" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" x-text="product.title"></h3>
+                                                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p x-text="product.description"></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <h5 class="modal-title" x-text="` R$ ${product.price} `"></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-
-                            </div>
-                            <!-- Fim Card -->
-
+                                <!-- Fim Card -->
+                            </template>
                         </template>
                     </div>
                 </div>
