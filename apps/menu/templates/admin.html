@@ -43,7 +43,7 @@
                         <label for="category">
                             Categoria
                             <select name="idCategory" id="idCategory" class="form-control">
-                                <option>---------</option>
+                                <optionx-model="0">---------</option>
                                 <template x-for="category in allCategories" :key="category.id">
                                     <option :value="category.id" x-text="category.title"></option>
                                 </template>
@@ -61,7 +61,7 @@
                         <label for="promocional_price">
                             Preço de Promoção
                             <input type="text" name="promocional_price" id="productPromocionalPrice" placeholder="15.99"
-                                class="form-control">
+                                class="form-control" >
                         </label>
                         <label for="description">
                             Descrição
@@ -96,7 +96,7 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            :data-bs-target="`#category-${category.id}`" x-text="category.title">
+                            :data-bs-target="`#category-${category.id}`" x-text="`${category.title} - (${category.products.length})`">
 
                         </button>
                     </h2>
@@ -126,6 +126,17 @@
                                                 </h5>
 
                                                 <p class="card-text" x-text="product.description"></p>
+                                                <label>Produto Ativo: 
+                                                    <template x-if="product.is_active">
+                                                        <input type="checkbox" checked disabled>
+                                                    </template>
+                                                </label>
+                                                <br>
+                                                <label>Produto em Promoção: 
+                                                    <template x-if="product.is_promo">
+                                                        <input type="checkbox" checked disabled>
+                                                    </template>
+                                                </label>
                                                 <div class="card-footer d-flex gap-1">
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
                                                         :data-bs-target="`#modalcard-${product.id}`">
@@ -147,53 +158,63 @@
                                         <div class="modal-dialog">
 
                                             <div class="modal-content">
-
-
                                                 <div class="modal-header">
-                                                    <label for="title">
-                                                        Titulo:
-                                                        <input type="text" name="title" id="title"
-                                                            :value="product.title" class="form-control">
-                                                    </label>
+                                                    <h3>Edição de Produto</h3>
                                                     <button class="btn-close" data-bs-dismiss="modal"></button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <label for="title">
+                                                        Titulo:
+                                                        <input type="text" name="title" id="title"
+                                                            x-model="product.title" class="form-control">
+                                                    </label>
                                                     <label for="description">
                                                         Descrição:
                                                         <textarea name="description" id="description"
-                                                            :value="product.description"
+                                                            x-model="product.description"
                                                             class="form-control"></textarea>
                                                     </label>
                                                     <label for="price">
                                                         Preço:
                                                         <input type="text" name="price" id="price"
-                                                            :value="product.price" class="form-control">
+                                                            x-model="product.price" class="form-control">
 
                                                     </label>
                                                     <label for="promocional_price">
                                                         Preço Promocional:
                                                         <input type="text" name="promocional_price"
-                                                            id="promocional_price" :value="product.promocional_price"
+                                                            id="promocional_price" x-model="product.promocional_price"
                                                             class="form-control">
                                                     </label>
                                                     <label for="is_active">
                                                         Em Estoque/Ativo:
                                                         <input type="checkbox" name="is_active" id="is_active"
-                                                            :value="product.is_active">
+                                                            x-model="product.is_active">
                                                     </label>
                                                     <label for="is_promo">
                                                         Em Promoção:
                                                         <input type="checkbox" name="is_promo" id="is_promo"
-                                                            :value="product.is_promo">
+                                                            x-model="product.is_promo">
                                                     </label>
+                                                    <div class="d-flex justify-content-center">
+                                                        <template x-if="!product.image">
+                                                            <img src="{% static 'img/product_placeholder.png' %}" alt=""
+                                                                class="img-fluid col-5"
+                                                                style="height: 100%; object-fit: cover; width: 100%;" />
+                                                        </template>
+                                                        <template x-if="product.image">
+                                                            <img :src="`${product.image}`" alt="" class="img-fluid col-5"
+                                                                style="height: 100%; object-fit: cover; width: 100%;" />
+                                                        </template>
+                                                    </div>
                                                     <label for="image">
                                                         Nova Imagem:
-                                                        <input type="file" name="image" id="productImage"
+                                                        <input type="file" name="image" :id="`productImage${product.id}`"
                                                             class="form-control">
                                                     </label>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button class="btn btn-success">Salvar</button>
+                                                    <button class="btn btn-success" @click="() => (updateProduct(product))">Salvar</button>
                                                 </div>
                                             </div>
 

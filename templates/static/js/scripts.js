@@ -97,42 +97,42 @@ const adminAria = () => ({
                 this.menu = res
             ))
         },
-        newCategoryModel: {
-            title: ''
-        },
-        async createNewCategory() {
-            await fetch(apiUrl + 'category', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(this.newCategoryModel)
-            })
-            .then(res => res.json())
-            .then(res => (
-                window.alert(`${res.title} foi criada!`),
-                this.menu.unshift(res),
-                this.allCategories.push(res),
-                this.newCategoryModel.title = ''
-            ))
-        },
-        async createNewProduct() {
-            let newProductData = new FormData()
-            let productImage = document.querySelector("#productImage").files[0]
-            let productModel = {
-                category_id: Number(document.querySelector('#idCategory').value),
-                title: document.querySelector("#productTitle").value,
-                price: document.querySelector("#productPrice").value,
-                promotional_price: document.querySelector("#productPromocionalPrice").value,
-                description: document.querySelector('#productDescription').value,
-                is_active: document.querySelector("#productIsActive").checked,
-                is_promo: document.querySelector('#productIsPromo').checked
-            }
-            
+    newCategoryModel: {
+        title: ''
+    },
+    async createNewCategory() {
+        await fetch(apiUrl + 'category', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.newCategoryModel)
+        })
+        .then(res => res.json())
+        .then(res => (
+            window.alert(`${res.title} foi criada!`),
+            this.menu.unshift(res),
+            this.allCategories.push(res),
+            this.newCategoryModel.title = ''
+        ))
+    },
+    
+    async createNewProduct() {
+        let newProductData = new FormData()
+        let productImage = document.querySelector("#productImage").files[0]
+        let productModel = {
+            category_id: document.querySelector('#idCategory').value ? Number(document.querySelector('#idCategory').value) : 0,
+            title: document.querySelector("#productTitle").value ? document.querySelector("#productTitle").value : "",
+            price: document.querySelector("#productPrice").value ? document.querySelector("#productPrice").value : 0,
+            promotional_price: document.querySelector("#productPromocionalPrice").value ? document.querySelector("#productPromocionalPrice").value : null,
+            description: document.querySelector('#productDescription').value ? document.querySelector('#productDescription').value : null,
+            is_active: document.querySelector("#productIsActive") ? Boolean(document.querySelector("#productIsActive").checked) : false,
+            is_promo: document.querySelector('#productIsPromo') ? Boolean(document.querySelector('#productIsPromo').checked) : false
+        }
+        
         newProductData.append('image', productImage)
         newProductData.append('payload', JSON.stringify(productModel))
-        
-        
+    
         await fetch(apiUrl + 'product', {
             method: 'POST',
             headers: {
@@ -140,24 +140,67 @@ const adminAria = () => ({
             },
             body: newProductData
         })
-        .then(res => res.json())
-        .then(res => (window.alert(`${res.product} foi criado em ${res.category}`), this.getProducts()))
-        
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("não foi possivel criar o produto")
+            } 
+            return res.json()
+        })
+        .then(res => (
+            console.log(res),
+            window.alert(`${res.title} foi criado`), 
+            this.getProducts()
+        ))
+        .catch(error => (
+            window.alert(`${error}`)
+        ))
+    
     },
     async deleteProduct(product_id) {
-        await fetch(apiUrl + `product/${product_id}`, {
-            method: 'DELETE',
-        })
-        .then(res => res.json())
-        .then(res => (
-            window.alert(`O produto ${res.deleted} foi deletado permanentemente!`),
-            this.menu.map((category, catIndex) => {
-                category.products.map((product, prodIndex) => {
-                        if (product.id == product_id) {
-                            category.products.splice(prodIndex, 1)
-                        }
-                    })
+    await fetch(apiUrl + `product/${product_id}`, {
+        method: 'DELETE',
+    })
+    .then(res => res.json())
+    .then(res => (
+        window.alert(`O produto ${res.deleted} foi deletado permanentemente!`),
+        this.menu.map((category) => {
+            category.products.map((product, prodIndex) => {
+                    if (product.id == product_id) {
+                        category.products.splice(prodIndex, 1)
+                    }
                 })
-            ))
-        }
+            })
+        ))
+    },
+    async updateProduct(product) {
+        let productId = product.id
+        let productData = product
+        delete productData.id
+        delete productData.category
+        delete productData.image
+        console.log(productData)
+
+        // let newProductImage = document.querySelector(`#productImage${productId}`).files[0] ? document.querySelector(`#productImage${productId}`).files[0] : ''
+        let updateProductData = new FormData()
+
+        // updateProductData.append('image', newProductImage)
+        updateProductData.append('payload', JSON.stringify(productData))
+
+        await fetch(apiUrl + `product/${productId}`, {
+            method: 'PUT',
+            body: updateProductData
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Não foi possível salvar as alterações")
+            }
+            return res.json()
+        })
+        .then(res => (
+            window.alert("Modificação salva com sucesso")
+        ))
+        .catch(error => (
+            window.alert(`${error}`)
+        ))
+    }
 })
