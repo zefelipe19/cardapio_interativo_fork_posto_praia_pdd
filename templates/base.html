@@ -34,7 +34,10 @@
                 <a class="nav-link" href="{% url 'index' %}">Home <i class="bi bi-house"></i></a>
                 <!-- <a class="nav-link" href="{% url 'cart' %}">Carrinho <i class="bi bi-cart"></i></a> -->
                 {% if request.user.is_authenticated %}
-                <a class="nav-link" href="{% url 'admin' %}">Gerenciar <i class="bi bi-pencil"></i></a>
+                <a class="nav-link" href="{% url 'card_admin' %}">Gerenciar <i class="bi bi-pencil"></i></a>
+                <a class="nav-link" href="{% url 'logout_user' %}">Sair <i class="bi bi-box-arrow-right"></i></a>
+                {% else %}
+                <a class="nav-link" href="{% url 'login_user' %}">Entrar <i class="bi bi-box-arrow-left"></i></a>
                 {% endif %}
                 <a class="nav-link" href="">Sobre</a>
             </div>

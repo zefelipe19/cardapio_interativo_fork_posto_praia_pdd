@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+{% block 'content' %}
+<div class="container d-flex flex-column align-items-center">
+    <h3>Seja Bem Vindo!</h3>
+    <div class="container mt-3">
+        <form action="{% url 'login_user' %}" method="post" class="form-group d-flex flex-column gap-2">
+            {% csrf_token %}
+            <label for="username">
+                Usuário
+                <input type="text" name="username" id="username" placeholder="Nome de usuário" class="form-control">
+            </label>
+            <label for="password" style="position: relative;">
+                Senha
+                <input type="password" name="password" id="password" placeholder="Senha" class="form-control"
+                    style="padding-right: 50px;">
+                <i class="bi bi-eye-fill" id="passwordEyeButton" onclick="showPasswordHandler()"
+                    style="position: absolute; right: 5%; top: 28px; font-size: larger; cursor: pointer; z-index: 100;"></i>
+            </label>
+
+            <input type="submit" value="Login" class="btn btn-success">
+        </form>
+    </div>
+
+</div>
+{% endblock %}
+{% block 'script' %}
+<script defer>
+    function showPasswordHandler() {
+        const passwordInput = document.querySelector("#password")
+        const showPasswordButton = document.querySelector("#passwordEyeButton")
+
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text"
+            showPasswordButton.className = "bi bi-eye-slash-fill"
+        } else {
+            passwordInput.type = "password"
+            showPasswordButton.className = "bi bi-eye-fill"
+        }
+
+    }
+</script>
+{% endblock %}
