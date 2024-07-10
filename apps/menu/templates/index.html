@@ -36,9 +36,11 @@
 
                                     <div class="col-md-7">
                                         <div class="card-body">
-                                            <h5 class="card-title"
-                                                x-text="`${product.title} - R$ ${product.promotional_price}`">
-                                            </h5>Preço normal <span x-text="`R$ ${product.price}`"
+                                            <h5 class="card-title fw-bold"
+                                                x-text="`${product.title}`" style="display: inline;">
+                                            </h5><span>-</span><span x-text="` R$ ${product.promotional_price}`"></span>
+                                            <br>
+                                            <span>Preço normal</span> <span x-text="`R$ ${product.price}`"
                                                 style="color: gray"></span>
 
                                             <p class="card-text" x-text="product.description"></p>
@@ -122,11 +124,22 @@
 
                                         <div class="col-md-7">
                                             <div class="card-body">
-                                                <h5 class="card-title"
-                                                    x-text="`${product.title} - R$ ${product.price}`">
-                                                </h5>
+                                                <h5 class="card-title fw-bold" x-text="`${product.title}`"
+                                                style="display: inline;">
+                                                </h5><span x-text="` - R$ ${product.price}`"></span>
 
                                                 <p class="card-text" x-text="product.description"></p>
+                                                <!-- <div class="d-flex justify-content-center gap-1">
+                                                    <button class="btn" data-bs-toggle="modal"
+                                                        :data-bs-target="`#modalcard-${product.id}`"
+                                                        style="background-color: #6cb0e2; color: #fff;">
+                                                        Detalhes
+                                                    </button>
+                                                    <button class="btn btn-success"
+                                                        @click="() => addInCart({id:`${product.id}`, title:`${product.title}`, price:`${product.price}`})">Adicionar
+                                                        ao carrinho</button>
+                                                </div>
+                                            </div> -->
                                                 <!-- <div class="card-footer d-flex gap-1">
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
                                                         :data-bs-target="`#modalcard-${product.id}`">

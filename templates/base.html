@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 
 <head>
-    <title>Cardapio Online</title>
+    <title>Posto Praia - Cardapio Online</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Bootstrap -->
@@ -13,13 +13,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <script defer src="//unpkg.com/alpinejs"></script>
     <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block 'head' %}{% endblock %}
 </head>
 
 <body>
-    <header class="navbar container-fluid d-flex align-items-center justify-content-between p-3 bg-body-tertiary mb-3">
+    <header class="navbar container-fluid d-flex align-items-center justify-content-between p-3 mb-3">
         <div class="navbar-brand">
-            <a class="nav-link" href="{% url 'index' %}">Cardapio online</a>
+            <a class="navbar-brand fw-bolder fs-2" href="{% url 'index' %}" style="color: #fff;" href="{% url 'index' %}">Posto Praia</a>
         </div>
         <button class="btn navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar"
             aria-controls="navbar">
@@ -27,7 +28,7 @@
         </button>
         <nav class="offcanvas offcanvas-end p-3" tabindex="-1" id="navbar" aria-labelledby="navbar">
             <div class="offcanvas-header">
-                <h2 class="offcanvas-title">Cardapio online</h2>
+                <h2 class="offcanvas-title fw-bold fs-2">Posto Praia</h2>
                 <button class="btn-close" aria-label="close" data-bs-dismiss="offcanvas"></button>
             </div>
             <div class="navbar-nav justify-content-center">
