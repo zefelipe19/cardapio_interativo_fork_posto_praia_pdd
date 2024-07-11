@@ -68,7 +68,7 @@ def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File
             **product_data,
             image=product_img
         )
-        return 200, product
+        return 201, product
     except Exception as e:
         return 400, {"message" : "Não foi possível criar o produto"}
 
