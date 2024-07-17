@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI, Body, File
 from ninja.files import UploadedFile
@@ -8,12 +8,20 @@ from .models import Product, Category
 api = NinjaAPI()
 
 @api.get('/list_menu', response=list[CategorySchemaMenu])
-def list_product(request):
+def list_menu(request):
     """
-        Busca todas as categorias e seus respectivos produtos
+        Busca todas as categorias que tenham ao menos um produto relacionado e que estejam ativos
     """
-    menu = Category.objects.all()
+    menu = Category.objects.annotate(products_qtd=Count('product')).filter(products_qtd__gte=1, product__is_active=True)
     return menu
+
+@api.get('/list_all_menu', response=list[CategorySchemaMenu])
+def list_all_menu(request):
+    """
+        Busca todas as categorias e seus produtos
+    """
+    all_menu = Category.objects.all()
+    return all_menu
 
 @api.get('/list_promos', response=list[ProductSchema])
 def list_promos(request):

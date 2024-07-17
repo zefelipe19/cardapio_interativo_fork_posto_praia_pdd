@@ -91,7 +91,7 @@ const adminAria = () => ({
     },
     menu: [],
     async getProducts() {
-        await fetch(apiUrl + 'list_menu')
+        await fetch(apiUrl + 'list_all_menu')
         .then(res => res.json())
             .then(res => (
                 this.menu = res

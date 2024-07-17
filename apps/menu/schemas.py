@@ -38,7 +38,7 @@ class CategorySchemaMenu(ModelSchema):
         model = Category
         fields = ['id', 'title']
     
-    products: list[ProductSchema] = Field(..., alias='product_set')
+    products: list[ProductSchema] = Field(..., alias='product')
 
 
 class MessageSchema(Schema):
