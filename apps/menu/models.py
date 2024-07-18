@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify  
 from uuid import uuid4
+from PIL import Image
 
 
 class BaseModel(models.Model):
@@ -46,6 +47,11 @@ class Product(BaseModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(f"{self.title}-{self.category}-{uuid4()}")
-        super().save()
-        return
-    
+        super().save(*args, **kwargs)
+        if self.image:
+            SIZE = (600, 600)
+            new_image = Image.open(self.image.path)
+            new_image.thumbnail(SIZE, Image.LANCZOS)
+            new_image.save(self.image.path)
+        return super().save(*args, **kwargs)
+        
