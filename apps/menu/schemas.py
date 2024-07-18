@@ -42,4 +42,4 @@ class CategorySchemaMenu(ModelSchema):
 
 
 class MessageSchema(Schema):
-    message: set
+    message: str

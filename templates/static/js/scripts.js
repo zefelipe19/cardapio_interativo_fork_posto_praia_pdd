@@ -142,6 +142,7 @@ const adminAria = () => ({
         })
         .then(res => {
             if (!res.ok) {
+                console.log(res)
                 throw new Error("não foi possivel criar o produto")
             } 
             return res.json()
@@ -162,7 +163,7 @@ const adminAria = () => ({
     })
     .then(res => res.json())
     .then(res => (
-        window.alert(`O produto ${res.deleted} foi deletado permanentemente!`),
+        window.alert(res.message),
         this.menu.map((category) => {
             category.products.map((product, prodIndex) => {
                     if (product.id == product_id) {
