@@ -26,11 +26,6 @@ SECRET_KEY = 'django-insecure-93!x74=*&-vkpe*+2sn^y93$fh9m8r=%_a86z$ok3qns6rlwp)
 DEBUG = True
 
 ALLOWED_HOSTS = ['*', ]
-<<<<<<< HEAD
-CSRF_TRUSTED_ORIGINS = ['https://8000-zefelipe19-cardapiointe-0302fik2pjg.ws-us115.gitpod.io']
-=======
-CSRF_TRUSTED_ORIGINS = ['https://8000-zefelipe19-cardapiointe-e0fhsbjif2w.ws-us115.gitpod.io']
->>>>>>> baixar_atualizacao
 
 # Application definition
 
