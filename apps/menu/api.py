@@ -71,14 +71,17 @@ def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File
     product_data = payload.dict()
     product_img = image
     try:
-        product = Product.objects.create(
+        product = Product(
             category=Category.objects.get(id=product_data.pop("category", None)),
             **product_data,
             image=product_img
         )
-        return 201, product
+        if product:
+            product.save()
+            return 201, product
     except Exception as e:
-        return 400, {"message" : "Não foi possível criar o produto"}
+        print("erro: ", e)
+        return 400, {"message" : f"Não foi possível criar o produto | Erro {e}"}
 
 @api.delete('/product/{product_id}', response={200: MessageSchema, 404: MessageSchema})
 def delete_product(request, product_id: int):
